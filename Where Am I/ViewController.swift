@@ -31,8 +31,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print(locations)
         let userLocation: CLLocation = locations[0] as CLLocation
-        self.latLabel.text = "\(userLocation.coordinate.latitude)" // to convert to string
-        self.longLabel.text = "\(userLocation.coordinate.longitude)"
+        let latitude = userLocation.coordinate.latitude
+        let longitude = userLocation.coordinate.longitude
+        let latDelta: CLLocationDegrees = 0.01 //difference in latitude from one side of the screen towards the other
+        let longDelta: CLLocationDegrees = 0.01
+        self.latLabel.text = "\(latitude)" // to convert to string
+        self.longLabel.text = "\(longitude)"
         self.courseLabel.text = "\(userLocation.course)"
         self.speedLabel.text = "\(userLocation.speed)"
         self.altitudeLabel.text = "\(userLocation.altitude)"
@@ -73,21 +77,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
                 if loc.administrativeArea != nil {
                     administrativeArea = loc.administrativeArea!
                 }
-                
+                // is messy, but it's the only way i can get the locality to align-left without a space... top line doesn't look perfect
                 self.nearestAddressLabel.text = "\(subThoroughfare) " + "\(thoroughfare)" + "\(subLocality) " + "\n" + "\(locality) " + "\(administrativeArea) " + "\(postalCode)" + "\n" + "\(country)"
             }
         }
+        let span: MKCoordinateSpan = MKCoordinateSpanMake(latDelta, longDelta)
+        let location: CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
+        let region: MKCoordinateRegion =  MKCoordinateRegionMake(location, span)
+        map.setRegion(region, animated: true)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = location
+        map.addAnnotation(annotation)
     }
 
-//        let userLocation: CLLocation = locations[0] as CLLocation // cast as
-//        let latitude = userLocation.coordinate.latitude
-//        let longitude = userLocation.coordinate.longitude
-//        let latDelta: CLLocationDegrees = 0.01 //difference in latitude from one side of the screen towards the other
-//        let longDelta: CLLocationDegrees = 0.01
-//        let span: MKCoordinateSpan = MKCoordinateSpanMake(latDelta, longDelta)
-//        let location: CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
-//        let region: MKCoordinateRegion =  MKCoordinateRegionMake(location, span)
-//        map.setRegion(region, animated: true)
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
