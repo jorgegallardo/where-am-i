@@ -78,23 +78,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
                     administrativeArea = loc.administrativeArea!
                 }
                 // is messy, but it's the only way i can get the locality to align-left without a space... top line doesn't look perfect
-                self.nearestAddressLabel.text = "\(subThoroughfare) " + "\(thoroughfare)" + "\(subLocality) " + "\n" + "\(locality) " + "\(administrativeArea) " + "\(postalCode)" + "\n" + "\(country)"
+                self.nearestAddressLabel.text = "\(subThoroughfare) " + "\(thoroughfare) " + "\(subLocality)" + "\n" + "\(locality) " + "\(administrativeArea) " + "\(postalCode)" + "\n" + "\(country)"
             }
         }
         let span: MKCoordinateSpan = MKCoordinateSpanMake(latDelta, longDelta)
         let location: CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
         let region: MKCoordinateRegion =  MKCoordinateRegionMake(location, span)
         map.setRegion(region, animated: true)
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = location
-        map.addAnnotation(annotation)
+//        let annotation = MKPointAnnotation()
+//        annotation.coordinate = location
+//        map.addAnnotation(annotation)
     }
 
-
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 }
-
